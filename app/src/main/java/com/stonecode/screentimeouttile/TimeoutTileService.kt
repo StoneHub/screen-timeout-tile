@@ -1,6 +1,7 @@
 package com.stonecode.screentimeouttile
 
 import android.content.Intent
+import android.graphics.drawable.Icon
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
@@ -8,7 +9,7 @@ import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
 import androidx.annotation.RequiresApi
 
-@RequiresApi(Build.VERSION_CODES.Q)
+@RequiresApi(Build.VERSION_CODES.N)
 class TimeoutTileService : TileService() {
 
     private val controller by lazy { ScreenTimeoutController(this) }
@@ -61,7 +62,13 @@ class TimeoutTileService : TileService() {
     private fun setTileState(state: Int, subtitle: String?) {
         val tile = qsTile ?: return
         tile.state = state
-        tile.subtitle = subtitle
+        tile.label = getString(R.string.app_name)
+        tile.icon = Icon.createWithResource(this, R.drawable.ic_qs_timeout)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            tile.subtitle = subtitle
+        } else {
+            tile.contentDescription = subtitle ?: getString(R.string.app_description)
+        }
         tile.updateTile()
     }
 }
