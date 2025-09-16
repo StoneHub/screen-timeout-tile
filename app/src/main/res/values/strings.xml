@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Screen Timeout Tile</string>
+    <string name="app_description">Toggle the screen timeout between quick and extended presets.</string>
+    <string name="tile_subtitle_permission">Grant write settings</string>
+    <string name="tile_subtitle_seconds">%1$d sec timeout</string>
+    <string name="tile_subtitle_minutes">%1$d min timeout</string>
+    <string name="permission_button_label">Open system settings</string>
+    <string name="permission_needed_status">Permission required</string>
+    <string name="permission_granted_status">Ready to toggle screen timeout</string>
+    <string name="current_timeout_value">Current timeout: %1$s</string>
+    <string name="current_timeout_unknown">Current timeout: unavailable</string>
+    <string name="instructions_text">After granting permission, add the Screen Timeout tile to Quick Settings and tap it to switch between presets.</string>
+</resources>
