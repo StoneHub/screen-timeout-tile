@@ -1,13 +1,23 @@
 <resources>
     <string name="app_name">Screen Timeout Tile</string>
-    <string name="app_description">Toggle the screen timeout between quick and extended presets.</string>
+    <string name="app_description">Switch between 30 seconds and 10 minutes from Quick Settings.</string>
     <string name="tile_subtitle_permission">Grant write settings</string>
     <string name="tile_subtitle_seconds">%1$d sec timeout</string>
     <string name="tile_subtitle_minutes">%1$d min timeout</string>
     <string name="permission_button_label">Open system settings</string>
+    <string name="tile_button_label">Add tile</string>
     <string name="permission_needed_status">Permission required</string>
     <string name="permission_granted_status">Ready to toggle screen timeout</string>
     <string name="current_timeout_value">Current timeout: %1$s</string>
     <string name="current_timeout_unknown">Current timeout: unavailable</string>
-    <string name="instructions_text">After granting permission, add the Screen Timeout tile to Quick Settings and tap it to switch between presets.</string>
+    <string name="next_action_grant_permission">Next: grant Modify system settings access.</string>
+    <string name="next_action_add_tile">Next: add the tile.</string>
+    <string name="next_action_manual_add_tile">Next: add the tile from Quick Settings edit mode.</string>
+    <string name="tile_request_status_idle">Tile placement request not sent yet.</string>
+    <string name="tile_request_status_added">Tile added to Quick Settings.</string>
+    <string name="tile_request_status_already_added">Tile is already in Quick Settings.</string>
+    <string name="tile_request_status_not_added">Tile was not added. Use the manual Quick Settings edit flow.</string>
+    <string name="tile_request_status_error">Tile placement request failed. Use the manual Quick Settings edit flow.</string>
+    <string name="tile_request_status_unsupported">Direct tile placement is available on Android 13 and newer.</string>
+    <string name="instructions_text">After setup, tap the tile to switch between the short and long timeout modes.</string>
 </resources>

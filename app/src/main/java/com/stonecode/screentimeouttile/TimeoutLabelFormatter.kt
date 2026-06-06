@@ -5,12 +5,19 @@ import android.content.Context
 object TimeoutLabelFormatter {
 
     fun format(context: Context, timeoutMs: Int): String {
-        val seconds = timeoutMs / 1000
-        return if (seconds >= 60) {
-            val minutes = seconds / 60
-            context.getString(R.string.tile_subtitle_minutes, minutes)
-        } else {
-            context.getString(R.string.tile_subtitle_seconds, seconds)
+        return format(context, TimeoutDurationLabel.fromMillis(timeoutMs))
+    }
+
+    fun format(context: Context, label: TimeoutDurationLabel): String {
+        return when (label) {
+            is TimeoutDurationLabel.Minutes -> context.getString(
+                R.string.tile_subtitle_minutes,
+                label.value,
+            )
+            is TimeoutDurationLabel.Seconds -> context.getString(
+                R.string.tile_subtitle_seconds,
+                label.value,
+            )
         }
     }
 }

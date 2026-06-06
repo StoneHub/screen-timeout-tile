@@ -10,6 +10,7 @@ A minimal Android app that adds a Quick Settings tile. Tapping the tile toggles 
 * On tap, reads the current timeout value and toggles between two presets.
 * Updates tile state when toggled.
 * Requests **Modify system settings** permission if not yet granted.
+* On Android 13+, requests direct tile placement through the system prompt.
 
 ---
 
@@ -42,9 +43,10 @@ A minimal Android app that adds a Quick Settings tile. Tapping the tile toggles 
 * Handles `onClick` to toggle timeout.
 * Uses `qsTile.state` to reflect ON/OFF.
 
-### `MainActivity` (optional)
-* Provides app entry point if user opens the app from the launcher.
-* Can explain what the tile does and link to permission settings.
+### `MainActivity`
+* Provides the setup entry point if user opens the app from the launcher.
+* Shows permission status, current timeout, next action, and tile-placement controls.
+* Uses Android 13+ direct tile placement when available, with manual instructions as fallback.
 
 ---
 
@@ -130,15 +132,16 @@ class TimeoutTileService : TileService() {
 
 ## Future Improvements
 * More than two timeout presets (cycle through list).
-* Show current timeout in tile subtitle.
+* Preset labels or names beyond the current timeout subtitle.
 * Option to auto-reset after a period.
 * Settings screen for custom timeout values.
 
 ---
 
 ## Deployment Checklist
-* [ ] Implement `TimeoutTileService`.
-* [ ] Add manifest entries.
-* [ ] Test on API 24+ devices (Quick Settings available).
-* [ ] Handle permission flow.
+* [x] Implement `TimeoutTileService`.
+* [x] Add manifest entries.
+* [ ] Test on API 24-32 devices for manual tile placement.
+* [ ] Test on API 33+ devices for direct tile placement.
+* [x] Handle permission flow.
 * [ ] Build release APK/AAB.
