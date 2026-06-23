@@ -111,7 +111,7 @@ app/src/androidTest/java/          Instrumentation smoke tests
 
 ## Current Status
 
-The core tile behavior, setup screen, Android 13+ tile request flow, and JVM tests are in place. Release packaging and Play Store publishing are still tracked in [docs/release-todo.md](docs/release-todo.md).
+The core tile behavior, setup screen, Android 13+ tile request flow, and JVM tests are in place. Release packaging and Play Store publishing are still in progress.
 
 ## Contributing
 
