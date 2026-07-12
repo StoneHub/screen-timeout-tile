@@ -21,10 +21,10 @@ Android has the screen timeout setting buried in system settings. This project m
 ## Requirements
 
 - Android 7.0 or newer, API 24+
-- Android Studio Giraffe or newer recommended
+- Android Studio Narwhal 4 Feature Drop or newer recommended
 - Android Gradle Plugin 8.13.0
 - Kotlin 2.0.21
-- Java 11 toolchain
+- JDK 17
 
 ## Install A Debug Build
 

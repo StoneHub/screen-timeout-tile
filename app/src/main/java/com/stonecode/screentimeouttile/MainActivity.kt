@@ -4,7 +4,6 @@ import android.app.StatusBarManager
 import android.content.ComponentName
 import android.content.Intent
 import android.graphics.drawable.Icon
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
@@ -12,6 +11,11 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updatePadding
 
 class MainActivity : AppCompatActivity() {
 
@@ -31,7 +35,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.enableEdgeToEdge(window)
         setContentView(R.layout.activity_main)
+        configureSystemBars()
 
         controller = ScreenTimeoutController(this)
         statusView = findViewById(R.id.permissionStatus)
@@ -45,6 +51,25 @@ class MainActivity : AppCompatActivity() {
         tileButton.setOnClickListener { requestTilePlacement() }
     }
 
+    private fun configureSystemBars() {
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            isAppearanceLightStatusBars = false
+            isAppearanceLightNavigationBars = false
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.screenContent)) { view, insets ->
+            val safeDrawing = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout(),
+            )
+            view.updatePadding(
+                left = safeDrawing.left,
+                top = safeDrawing.top,
+                right = safeDrawing.right,
+                bottom = safeDrawing.bottom,
+            )
+            insets
+        }
+    }
+
     override fun onResume() {
         super.onResume()
         updateUi()
@@ -52,7 +77,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun openWriteSettings() {
         val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS).apply {
-            data = Uri.parse("package:$packageName")
+            data = "package:$packageName".toUri()
         }
         permissionLauncher.launch(intent)
     }
@@ -107,10 +132,10 @@ class MainActivity : AppCompatActivity() {
 
         val statusBarManager = getSystemService(StatusBarManager::class.java)
         val componentName = ComponentName(this, TimeoutTileService::class.java)
-        val icon = Icon.createWithResource(this, R.drawable.ic_qs_timeout)
+        val icon = Icon.createWithResource(this, R.drawable.ic_qs_timeout_long)
         statusBarManager.requestAddTileService(
             componentName,
-            getString(R.string.app_name),
+            getString(R.string.tile_label),
             icon,
             mainExecutor,
         ) { result ->

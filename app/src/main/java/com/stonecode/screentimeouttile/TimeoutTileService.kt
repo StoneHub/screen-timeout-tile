@@ -1,16 +1,15 @@
 package com.stonecode.screentimeouttile
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.drawable.Icon
-import android.net.Uri
 import android.os.Build
 import android.provider.Settings
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import androidx.annotation.RequiresApi
+import androidx.core.net.toUri
 
-@RequiresApi(Build.VERSION_CODES.N)
 class TimeoutTileService : TileService() {
 
     private val controller by lazy { ScreenTimeoutController(this) }
@@ -39,9 +38,10 @@ class TimeoutTileService : TileService() {
             }
     }
 
+    @SuppressLint("StartActivityAndCollapseDeprecated")
     private fun requestWriteSettings() {
         val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS).apply {
-            data = Uri.parse("package:$packageName")
+            data = "package:$packageName".toUri()
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
@@ -60,7 +60,6 @@ class TimeoutTileService : TileService() {
 
     private fun refreshTileState() {
         val hasPermission = controller.canModifySystemSettings()
-        val timeout = runCatching { controller.getCurrentTimeout() }.getOrDefault(controller.shortTimeoutMs)
         if (!hasPermission) {
             setTileState(
                 state = Tile.STATE_INACTIVE,
@@ -68,7 +67,15 @@ class TimeoutTileService : TileService() {
                 iconResId = R.drawable.ic_qs_timeout_permission,
             )
         } else {
-            updateTileForTimeout(timeout)
+            runCatching { controller.getCurrentTimeout() }
+                .onSuccess(::updateTileForTimeout)
+                .onFailure {
+                    setTileState(
+                        state = Tile.STATE_UNAVAILABLE,
+                        subtitle = getString(R.string.tile_subtitle_unavailable),
+                        iconResId = R.drawable.ic_qs_timeout_long,
+                    )
+                }
         }
     }
 
@@ -89,12 +96,11 @@ class TimeoutTileService : TileService() {
     private fun setTileState(state: Int, subtitle: String?, iconResId: Int) {
         val tile = qsTile ?: return
         tile.state = state
-        tile.label = getString(R.string.app_name)
+        tile.label = getString(R.string.tile_label)
         tile.icon = Icon.createWithResource(this, iconResId)
+        tile.contentDescription = subtitle ?: getString(R.string.app_description)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             tile.subtitle = subtitle
-        } else {
-            tile.contentDescription = subtitle ?: getString(R.string.app_description)
         }
         tile.updateTile()
     }

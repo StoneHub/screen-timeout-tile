@@ -9,7 +9,7 @@ sealed interface TimeoutDurationLabel {
     companion object {
         fun fromMillis(timeoutMs: Int): TimeoutDurationLabel {
             val seconds = timeoutMs / 1_000
-            return if (seconds >= 60) {
+            return if (seconds >= 60 && seconds % 60 == 0) {
                 Minutes(seconds / 60)
             } else {
                 Seconds(seconds)

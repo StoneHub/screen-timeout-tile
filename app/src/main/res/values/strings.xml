@@ -1,9 +1,17 @@
 <resources>
     <string name="app_name">Screen Timeout Tile</string>
     <string name="app_description">Switch between 30 seconds and 10 minutes from Quick Settings.</string>
+    <string name="tile_label">Screen timeout</string>
     <string name="tile_subtitle_permission">Grant write settings</string>
-    <string name="tile_subtitle_seconds">%1$d sec timeout</string>
-    <string name="tile_subtitle_minutes">%1$d min timeout</string>
+    <string name="tile_subtitle_unavailable">Timeout unavailable</string>
+    <plurals name="tile_subtitle_seconds">
+        <item quantity="one">%1$d second timeout</item>
+        <item quantity="other">%1$d seconds timeout</item>
+    </plurals>
+    <plurals name="tile_subtitle_minutes">
+        <item quantity="one">%1$d minute timeout</item>
+        <item quantity="other">%1$d minutes timeout</item>
+    </plurals>
     <string name="permission_button_label">Open system settings</string>
     <string name="tile_button_label">Add tile</string>
     <string name="permission_needed_status">Permission required</string>
