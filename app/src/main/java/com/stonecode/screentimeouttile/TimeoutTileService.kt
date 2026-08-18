@@ -30,11 +30,13 @@ class TimeoutTileService : TileService() {
             .onSuccess { result ->
                 when (result) {
                     is TimeoutChangeResult.Changed -> updateTileForTimeout(result.timeoutMs)
-                    TimeoutChangeResult.WriteFailed -> refreshTileState()
+                    TimeoutChangeResult.WriteFailed -> showTileError(
+                        getString(R.string.tile_subtitle_write_failed),
+                    )
                 }
             }
             .onFailure {
-                refreshTileState()
+                showTileError(getString(R.string.tile_subtitle_unavailable))
             }
     }
 
@@ -44,17 +46,21 @@ class TimeoutTileService : TileService() {
             data = "package:$packageName".toUri()
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            val pendingIntent = PendingIntent.getActivity(
-                this,
-                0,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-            )
-            startActivityAndCollapse(pendingIntent)
-        } else {
-            @Suppress("DEPRECATION")
-            startActivityAndCollapse(intent)
+        runCatching {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+                val pendingIntent = PendingIntent.getActivity(
+                    this,
+                    0,
+                    intent,
+                    PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+                )
+                startActivityAndCollapse(pendingIntent)
+            } else {
+                @Suppress("DEPRECATION")
+                startActivityAndCollapse(intent)
+            }
+        }.onFailure {
+            showTileError(getString(R.string.tile_subtitle_settings_unavailable))
         }
     }
 
@@ -96,12 +102,27 @@ class TimeoutTileService : TileService() {
     private fun setTileState(state: Int, subtitle: String?, iconResId: Int) {
         val tile = qsTile ?: return
         tile.state = state
-        tile.label = getString(R.string.tile_label)
+        tile.label = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q || subtitle == null) {
+            getString(R.string.tile_label)
+        } else {
+            subtitle
+        }
         tile.icon = Icon.createWithResource(this, iconResId)
-        tile.contentDescription = subtitle ?: getString(R.string.app_description)
+        tile.contentDescription = getString(R.string.tile_content_description)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             tile.subtitle = subtitle
         }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            tile.stateDescription = subtitle
+        }
         tile.updateTile()
+    }
+
+    private fun showTileError(message: String) {
+        setTileState(
+            state = Tile.STATE_UNAVAILABLE,
+            subtitle = message,
+            iconResId = R.drawable.ic_qs_timeout_permission,
+        )
     }
 }

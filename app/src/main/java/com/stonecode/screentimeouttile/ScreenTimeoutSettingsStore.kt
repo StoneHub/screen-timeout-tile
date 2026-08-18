@@ -20,7 +20,6 @@ class AndroidScreenTimeoutSettingsStore(context: Context) : ScreenTimeoutSetting
     override fun getTimeoutMs(): Int = Settings.System.getInt(
         resolver,
         Settings.System.SCREEN_OFF_TIMEOUT,
-        TimeoutTogglePolicy.SHORT_TIMEOUT_MS,
     )
 
     override fun setTimeoutMs(timeoutMs: Int): Boolean = Settings.System.putInt(

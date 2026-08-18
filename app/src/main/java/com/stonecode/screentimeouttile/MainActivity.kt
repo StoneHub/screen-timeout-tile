@@ -37,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         WindowCompat.enableEdgeToEdge(window)
         setContentView(R.layout.activity_main)
+        ViewCompat.setAccessibilityHeading(findViewById(R.id.title), true)
         configureSystemBars()
 
         controller = ScreenTimeoutController(this)
@@ -79,7 +80,10 @@ class MainActivity : AppCompatActivity() {
         val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS).apply {
             data = "package:$packageName".toUri()
         }
-        permissionLauncher.launch(intent)
+        runCatching { permissionLauncher.launch(intent) }
+            .onFailure {
+                nextActionView.text = getString(R.string.permission_request_status_error)
+            }
     }
 
     private fun updateUi() {
@@ -130,16 +134,20 @@ class MainActivity : AppCompatActivity() {
             return
         }
 
-        val statusBarManager = getSystemService(StatusBarManager::class.java)
-        val componentName = ComponentName(this, TimeoutTileService::class.java)
-        val icon = Icon.createWithResource(this, R.drawable.ic_qs_timeout_long)
-        statusBarManager.requestAddTileService(
-            componentName,
-            getString(R.string.tile_label),
-            icon,
-            mainExecutor,
-        ) { result ->
-            tileRequestStatusView.text = tileRequestStatusText(result)
+        runCatching {
+            val statusBarManager = getSystemService(StatusBarManager::class.java)
+            val componentName = ComponentName(this, TimeoutTileService::class.java)
+            val icon = Icon.createWithResource(this, R.drawable.ic_qs_timeout_long)
+            statusBarManager.requestAddTileService(
+                componentName,
+                getString(R.string.tile_label),
+                icon,
+                mainExecutor,
+            ) { result ->
+                tileRequestStatusView.text = tileRequestStatusText(result)
+            }
+        }.onFailure {
+            tileRequestStatusView.text = getString(R.string.tile_request_status_error)
         }
     }
 

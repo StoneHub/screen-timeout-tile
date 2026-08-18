@@ -1,0 +1,6 @@
+# Copy this file to release-signing.properties and keep the real values local.
+# The store path is resolved from the repository root.
+storeFile=keystores/upload-key.jks
+storePassword=replace-me
+keyAlias=upload
+keyPassword=replace-me
