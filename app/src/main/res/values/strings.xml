@@ -1,10 +1,23 @@
 <resources>
     <string name="app_name">Screen Timeout Tile</string>
     <string name="app_description">Switch between 30 seconds and 10 minutes from Quick Settings.</string>
+    <string name="tile_label">Screen timeout</string>
     <string name="tile_subtitle_permission">Grant write settings</string>
-    <string name="tile_subtitle_seconds">%1$d sec timeout</string>
-    <string name="tile_subtitle_minutes">%1$d min timeout</string>
+    <string name="tile_subtitle_unavailable">Timeout unavailable</string>
+    <string name="tile_subtitle_write_failed">Could not change timeout</string>
+    <string name="tile_subtitle_settings_unavailable">Settings unavailable</string>
+    <string name="tile_content_description">Screen timeout toggle</string>
+    <plurals name="tile_subtitle_seconds">
+        <item quantity="one">%1$d second timeout</item>
+        <item quantity="other">%1$d seconds timeout</item>
+    </plurals>
+    <plurals name="tile_subtitle_minutes">
+        <item quantity="one">%1$d minute timeout</item>
+        <item quantity="other">%1$d minutes timeout</item>
+    </plurals>
     <string name="permission_button_label">Open system settings</string>
+    <string name="permission_rationale">Android’s Modify system settings access is required only to read and change the screen timeout. This app does not change any other setting.</string>
+    <string name="permission_request_status_error">Could not open Modify system settings. Open Android Settings, search for “Modify system settings,” and allow Screen Timeout Tile.</string>
     <string name="tile_button_label">Add tile</string>
     <string name="permission_needed_status">Permission required</string>
     <string name="permission_granted_status">Ready to toggle screen timeout</string>
@@ -19,5 +32,13 @@
     <string name="tile_request_status_not_added">Tile was not added. Use the manual Quick Settings edit flow.</string>
     <string name="tile_request_status_error">Tile placement request failed. Use the manual Quick Settings edit flow.</string>
     <string name="tile_request_status_unsupported">Direct tile placement is available on Android 13 and newer.</string>
-    <string name="instructions_text">After setup, tap the tile to switch between the short and long timeout modes.</string>
+    <string name="tile_legend_title">What the tile means</string>
+    <string name="tile_legend_explanation">The tile is never “off.” It always shows one of two screen timeout presets.</string>
+    <string name="tile_legend_long_title">Hourglass · 10 minutes</string>
+    <string name="tile_legend_long_description">Highlighted tile. Keeps the screen on longer.</string>
+    <string name="tile_legend_short_title">Clock with bolt · 30 seconds</string>
+    <string name="tile_legend_short_description">Dim tile. Returns to the short timeout.</string>
+    <string name="tile_legend_permission_title">Lock · Permission needed</string>
+    <string name="tile_legend_permission_description">Tap the tile, then allow Modify system settings.</string>
+    <string name="instructions_text">After setup, each tap switches between the 30-second and 10-minute timeout.</string>
 </resources>

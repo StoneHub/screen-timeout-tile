@@ -4,6 +4,12 @@ Screen Timeout Tile is a small Android app that adds a Quick Settings tile for s
 
 It is built for the common Android workflow where you want the screen to stay awake while reading, debugging, cooking, presenting, or using your phone as a reference display, but you still want a quick way back to a short timeout afterward.
 
+## Download
+
+Download the signed APK from the [latest GitHub release](https://github.com/StoneHub/screen-timeout-tile/releases/latest). Android 7.0 or newer is required.
+
+Because this app is distributed outside Google Play, Android may ask you to allow installs from the browser or file manager you used to download it. That permission can be turned off again immediately after installation.
+
 ## What It Does
 
 - Adds a **Screen Timeout Tile** to Android Quick Settings.
@@ -13,6 +19,15 @@ It is built for the common Android workflow where you want the screen to stay aw
 - Includes a setup screen for permission status, current timeout, and tile placement.
 - Supports Android 13+ direct tile placement through the system prompt.
 - Keeps Android 7-12 manual Quick Settings edit instructions available.
+- Explains the hourglass, clock/bolt, and permission icons in the setup screen.
+
+## What The Tile Means
+
+- **Hourglass, highlighted:** 10-minute timeout.
+- **Clock with bolt, dim:** 30-second timeout.
+- **Lock:** Modify system settings permission is still needed.
+
+The tile is never “off.” Each tap switches between the two timeout presets.
 
 ## Why This Exists
 
@@ -21,10 +36,10 @@ Android has the screen timeout setting buried in system settings. This project m
 ## Requirements
 
 - Android 7.0 or newer, API 24+
-- Android Studio Giraffe or newer recommended
+- Android Studio Narwhal 4 Feature Drop or newer recommended
 - Android Gradle Plugin 8.13.0
 - Kotlin 2.0.21
-- Java 11 toolchain
+- JDK 17
 
 ## Install A Debug Build
 
@@ -36,8 +51,10 @@ Android has the screen timeout setting buried in system settings. This project m
 If your shell cannot find the Android SDK, set the SDK path for the command:
 
 ```bash
-ANDROID_HOME=/Users/monroe/Library/Android/sdk ANDROID_SDK_ROOT=/Users/monroe/Library/Android/sdk ./gradlew installDebug
+ANDROID_HOME="$HOME/Library/Android/sdk" ANDROID_SDK_ROOT="$HOME/Library/Android/sdk" ./gradlew installDebug
 ```
+
+Debug builds use the isolated package `com.stonecode.screentimeouttile.debug`, so a dogfood install cannot block a later production-signed update.
 
 ## Setup On A Device
 
@@ -60,6 +77,8 @@ The app requests only:
 That permission is required because Android protects writes to `Settings.System.SCREEN_OFF_TIMEOUT`. The user must grant it manually from Android system settings.
 
 This app does not declare internet access, does not create accounts, does not run analytics, and does not collect personal data.
+
+See the full [privacy policy](PRIVACY.md).
 
 ## Development
 
@@ -88,6 +107,8 @@ Before publishing a release build, also run:
 ./gradlew :app:bundleRelease
 ```
 
+Release signing can use either the ignored `release-signing.properties` file or Keychain-backed environment variables. See [release signing](docs/release-signing.md). Without signing inputs, Gradle intentionally produces an unsigned release artifact for validation only.
+
 ## Project Structure
 
 ```text
@@ -111,7 +132,7 @@ app/src/androidTest/java/          Instrumentation smoke tests
 
 ## Current Status
 
-The core tile behavior, setup screen, Android 13+ tile request flow, and JVM tests are in place. Release packaging and Play Store publishing are still in progress.
+Version 1.1.0 is the first signed GitHub release. Play Store publishing remains a separate future distribution path.
 
 ## Contributing
 
@@ -119,7 +140,7 @@ Issues and pull requests are welcome. Useful contributions include:
 
 - Testing tile behavior on different Android versions and OEM skins.
 - Improving accessibility and large-font layout behavior.
-- Adding release engineering for signed builds.
+- Testing signed releases across additional Android devices and OEM skins.
 - Tightening the privacy policy and store listing docs.
 
 For code changes, keep behavior covered by JVM tests where possible and use instrumentation tests for device-specific setup or tile-placement flows.

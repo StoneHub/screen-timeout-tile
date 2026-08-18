@@ -10,12 +10,14 @@ object TimeoutLabelFormatter {
 
     fun format(context: Context, label: TimeoutDurationLabel): String {
         return when (label) {
-            is TimeoutDurationLabel.Minutes -> context.getString(
-                R.string.tile_subtitle_minutes,
+            is TimeoutDurationLabel.Minutes -> context.resources.getQuantityString(
+                R.plurals.tile_subtitle_minutes,
+                label.value,
                 label.value,
             )
-            is TimeoutDurationLabel.Seconds -> context.getString(
-                R.string.tile_subtitle_seconds,
+            is TimeoutDurationLabel.Seconds -> context.resources.getQuantityString(
+                R.plurals.tile_subtitle_seconds,
+                label.value,
                 label.value,
             )
         }

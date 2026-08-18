@@ -45,4 +45,17 @@ class SetupUiStateTest {
         assertEquals(TimeoutStatus.Available(TimeoutDurationLabel.Seconds(30)), state.timeoutStatus)
         assertFalse(state.canRequestTilePlacement)
     }
+
+    @Test
+    fun shouldShowTimeoutUnavailable_whenSettingsReadFails() {
+        val state = SetupUiState.from(
+            canWriteSettings = true,
+            currentTimeoutMs = null,
+            canRequestTilePlacement = true,
+        )
+
+        assertEquals(SetupAction.ADD_TILE, state.primaryAction)
+        assertEquals(TimeoutStatus.Unavailable, state.timeoutStatus)
+        assertTrue(state.canRequestTilePlacement)
+    }
 }

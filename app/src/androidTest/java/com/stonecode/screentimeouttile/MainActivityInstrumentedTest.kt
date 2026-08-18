@@ -25,6 +25,7 @@ class MainActivityInstrumentedTest {
     fun shouldShowPermissionAndTileCtas_whenActivityLaunches() {
         ActivityScenario.launch(MainActivity::class.java).use {
             onView(withId(R.id.permissionButton)).check(matches(isDisplayed()))
+            onView(withId(R.id.permissionRationale)).check(matches(isDisplayed()))
             onView(withId(R.id.tileButton)).check(matches(isDisplayed()))
             onView(withId(R.id.nextAction)).check(matches(isDisplayed()))
         }

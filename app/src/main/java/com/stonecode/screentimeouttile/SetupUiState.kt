@@ -25,11 +25,9 @@ data class SetupUiState(
                 } else {
                     SetupAction.MANUAL_ADD_TILE
                 },
-                timeoutStatus = TimeoutStatus.Available(
-                    TimeoutDurationLabel.fromMillis(
-                        currentTimeoutMs ?: TimeoutTogglePolicy.SHORT_TIMEOUT_MS,
-                    ),
-                ),
+                timeoutStatus = currentTimeoutMs?.let { timeoutMs ->
+                    TimeoutStatus.Available(TimeoutDurationLabel.fromMillis(timeoutMs))
+                } ?: TimeoutStatus.Unavailable,
                 canRequestTilePlacement = canRequestTilePlacement,
             )
         }

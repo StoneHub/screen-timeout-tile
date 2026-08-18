@@ -38,15 +38,26 @@ class ScreenTimeoutControllerTest {
         assertFalse(ScreenTimeoutController(readOnlyStore).canModifySystemSettings())
     }
 
+    @Test(expected = IllegalStateException::class)
+    fun shouldExposeReadFailure_whenStoreCannotReadTimeout() {
+        val store = FakeScreenTimeoutSettingsStore(readFailure = true)
+
+        ScreenTimeoutController(store).getCurrentTimeout()
+    }
+
     private class FakeScreenTimeoutSettingsStore(
         var currentTimeoutMs: Int = 30_000,
         private val canWrite: Boolean = true,
         private val acceptsWrites: Boolean = true,
+        private val readFailure: Boolean = false,
     ) : ScreenTimeoutSettingsStore {
 
         override fun canWrite(): Boolean = canWrite
 
-        override fun getTimeoutMs(): Int = currentTimeoutMs
+        override fun getTimeoutMs(): Int {
+            check(!readFailure) { "Timeout unavailable" }
+            return currentTimeoutMs
+        }
 
         override fun setTimeoutMs(timeoutMs: Int): Boolean {
             if (!acceptsWrites) return false

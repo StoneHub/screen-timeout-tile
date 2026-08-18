@@ -51,72 +51,19 @@ A minimal Android app that adds a Quick Settings tile. Tapping the tile toggles 
 ---
 
 ## Manifest
-```xml
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
-    <uses-permission
-        android:name="android.permission.WRITE_SETTINGS"
-        tools:ignore="ProtectedPermissions" />
-
-    <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.ScreenTimeoutTile">
-
-        <activity android:name=".MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <service
-            android:name=".TimeoutTileService"
-            android:label="Screen Timeout"
-            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
-            <intent-filter>
-                <action android:name="android.service.quicksettings.action.QS_TILE" />
-            </intent-filter>
-        </service>
-
-    </application>
-</manifest>
-```
+The production manifest is the source of truth. It declares only the protected
+`WRITE_SETTINGS` permission, the exported launcher activity, and the exported
+tile service guarded by `BIND_QUICK_SETTINGS_TILE`. App backup is disabled
+because the app stores no user data.
 
 ---
 
-## Example Implementation
-```kotlin
-@RequiresApi(Build.VERSION_CODES.N)
-class TimeoutTileService : TileService() {
-
-    override fun onClick() {
-        if (!Settings.System.canWrite(this)) {
-            val intent = Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS).apply {
-                data = Uri.parse("package:$packageName")
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            }
-            startActivity(intent)
-            return
-        }
-
-        val current = Settings.System.getInt(
-            contentResolver,
-            Settings.System.SCREEN_OFF_TIMEOUT,
-            30000
-        )
-
-        val newTimeout = if (current > 30000) 30000 else 600000 // 30 s vs 10 min
-        Settings.System.putInt(contentResolver, Settings.System.SCREEN_OFF_TIMEOUT, newTimeout)
-
-        qsTile.state = if (newTimeout > 30000) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
-        qsTile.updateTile()
-    }
-}
-```
+## Implementation
+`TimeoutTileService` owns the Android tile lifecycle, while
+`ScreenTimeoutController`, `ScreenTimeoutSettingsStore`, and
+`TimeoutTogglePolicy` keep settings access and toggle behavior independently
+testable. Refer to the production Kotlin sources instead of duplicating an
+implementation sample here.
 
 ---
 
