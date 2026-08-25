@@ -7,7 +7,6 @@
         <item name="colorSecondaryVariant">@color/brand_secondary</item>
         <item name="colorOnSecondary">@color/black</item>
         <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowLightNavigationBar">true</item>
         <item name="android:navigationBarColor">@color/setup_background</item>
         <item name="android:statusBarColor">@color/setup_background</item>
         <item name="android:windowBackground">@color/setup_background</item>
