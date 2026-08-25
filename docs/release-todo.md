@@ -1,9 +1,16 @@
 # Release TODO
 
+## Product Decisions
+
+- [x] Keep the signed APK free on GitHub and the planned project website.
+- [x] Sell the Google Play app as a one-time purchase between $1 and $3.
+- [x] Keep the app free of ads, subscriptions, analytics, accounts, and network access.
+- [x] Keep the repository without an open-source license for now.
+- [ ] Confirm the published Play listing reports eligibility for Google Play Family Library.
+
 ## Monroe To Do
 
 - Pick the public app name: keep `Screen Timeout Tile` or choose a shorter store name.
-- Decide whether the Play listing should be free-only, donation-supported, or paid.
 - Create/confirm the Google Play Console app entry.
 - Create a simple privacy policy page:
   - no ads
@@ -20,7 +27,11 @@
 - Get a screenshot of the low-contrast active Quick Settings tile state if it still happens after the bold icon update.
 - Write the store short description and full description.
 - Decide whether to publish under `StoneHub`/`StoneCode` branding.
-- Create an upload key and enable Play App Signing.
+- Create a separate Play upload key and enable Play App Signing.
+
+## Release Blockers
+
+- [ ] Before version 1.1.1 or any later GitHub release, verify a second encrypted backup of the GitHub APK signing keystore and password in a separate physical location.
 
 ## Code / Release Engineering To Do
 
@@ -31,9 +42,9 @@
 - [x] Bump to `versionCode=2` and `versionName=1.1.0`.
 - [x] Add release notes for 1.1.0.
 - [x] Create the permanent GitHub APK signing key and store its password in macOS Keychain.
-- [ ] Back up the GitHub APK signing keystore and Keychain password in a second secure location.
+- [ ] Record and verify the backup location without writing the secret into this repository.
 - [x] Build and verify the production-signed APK and AAB for version 1.1.0.
-- [ ] Publish GitHub Release `v1.1.0` with the signed APK and checksums.
+- [x] Published GitHub Release `v1.1.0` with the signed APK and checksums on August 18, 2026.
 - Run manual QA on at least:
   - Samsung Android 16 phone
   - Android 13+ device for direct tile placement
