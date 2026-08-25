@@ -1,6 +1,14 @@
 # Release Signing
 
-The GitHub APK signing identity is intentionally stored outside the repository.
+Release signing identities are intentionally stored outside the repository.
+
+## Distribution identities
+
+- GitHub APK updates use the existing Screen Timeout Tile release keystore documented below.
+- Google Play will use [Play App Signing](https://developer.android.com/studio/publish/app-signing) for the store signing identity and a separate upload key for Monroe's submissions.
+- The Play upload key has not been created or connected to this project yet.
+
+Do not treat a signed GitHub APK, a signed Play upload bundle, and a Play-distributed artifact as the same proof gate.
 
 ## Local source of truth
 
@@ -28,4 +36,6 @@ Verify the resulting APK with Android SDK `apksigner` before publishing it.
 
 ## Recovery requirement
 
-Back up both the `.jks` keystore and its Keychain password in a secure location. GitHub-distributed updates must keep using this signing key. Never commit the keystore, passwords, or `release-signing.properties`.
+Before publishing version 1.1.1 or any later GitHub update, verify a second encrypted backup of both the `.jks` keystore and its password in a separate physical location. This is a hard release blocker. GitHub-distributed updates must keep using this signing key.
+
+Keep the Play upload key and its recovery record under the same two-backup rule once created. Never commit a keystore, password, or `release-signing.properties`.

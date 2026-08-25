@@ -91,4 +91,4 @@ implementation sample here.
 * [ ] Test on API 24-32 devices for manual tile placement.
 * [ ] Test on API 33+ devices for direct tile placement.
 * [x] Handle permission flow.
-* [ ] Build release APK/AAB.
+* [x] Build and verify the release APK/AAB for version 1.1.0.

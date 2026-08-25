@@ -6,7 +6,9 @@ It is built for the common Android workflow where you want the screen to stay aw
 
 ## Download
 
-Download the signed APK from the [latest GitHub release](https://github.com/StoneHub/screen-timeout-tile/releases/latest). Android 7.0 or newer is required.
+Download the signed APK for free from the [latest GitHub release](https://github.com/StoneHub/screen-timeout-tile/releases/latest). Android 7.0 or newer is required. The free APK will also remain available from the project website when that page is published.
+
+A paid Google Play listing is planned at a one-time price between $1 and $3, with no ads or subscription. Purchases should be eligible for [Google Play Family Library](https://support.google.com/googleplay/answer/7007852). Play Store publication has not happened yet.
 
 Because this app is distributed outside Google Play, Android may ask you to allow installs from the browser or file manager you used to download it. That permission can be turned off again immediately after installation.
 
@@ -132,7 +134,7 @@ app/src/androidTest/java/          Instrumentation smoke tests
 
 ## Current Status
 
-Version 1.1.0 is the first signed GitHub release. Play Store publishing remains a separate future distribution path.
+Version 1.1.0 is published as the first signed GitHub release. The next distribution lane is a paid Google Play listing, while the signed GitHub and website APK stays free.
 
 ## Contributing
 

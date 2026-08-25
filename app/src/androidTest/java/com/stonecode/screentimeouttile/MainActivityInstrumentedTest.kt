@@ -18,7 +18,7 @@ class MainActivityInstrumentedTest {
     fun shouldUseExpectedPackageName_whenAppContextIsLoaded() {
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
 
-        assertEquals("com.stonecode.screentimeouttile", appContext.packageName)
+        assertEquals("com.stonecode.screentimeouttile.debug", appContext.packageName)
     }
 
     @Test
@@ -28,6 +28,10 @@ class MainActivityInstrumentedTest {
             onView(withId(R.id.permissionRationale)).check(matches(isDisplayed()))
             onView(withId(R.id.tileButton)).check(matches(isDisplayed()))
             onView(withId(R.id.nextAction)).check(matches(isDisplayed()))
+            onView(withId(R.id.setupProgress)).check(matches(isDisplayed()))
+            onView(withId(R.id.permissionStepBadge)).check(matches(isDisplayed()))
+            onView(withId(R.id.tileStepBadge)).check(matches(isDisplayed()))
+            onView(withId(R.id.useStepBadge)).check(matches(isDisplayed()))
         }
     }
 }
