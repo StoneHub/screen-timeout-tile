@@ -1,0 +1,308 @@
+<!doctype html>
+<!-- Throwaway prototype: three variants of the existing settings screen, switchable via ?variant= and ?state=. -->
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <title>Screen Timeout Tile settings prototype</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #080b0e;
+      color: #f5f7fb;
+      --blue: #6ea8ff;
+      --blue-strong: #377dff;
+      --teal: #55d6c2;
+      --amber: #ffcb66;
+      --muted: #9eabb8;
+      --line: rgba(255, 255, 255, 0.09);
+      --panel: #151b21;
+      --panel-2: #1b232b;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: radial-gradient(circle at 50% -10%, #1b2a3c 0, #0b1015 38%, #06080a 100%); }
+    button { font: inherit; }
+    .prototype-note {
+      position: fixed;
+      top: 18px;
+      left: 20px;
+      z-index: 20;
+      color: #a8b4c0;
+      font-size: 12px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .stage { min-height: 100vh; display: grid; place-items: center; padding: 58px 20px 108px; }
+    .phone {
+      width: min(412px, 100%);
+      min-height: 824px;
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 32px;
+      background: #0d1115;
+      box-shadow: 0 40px 120px rgba(0, 0, 0, 0.55), 0 0 0 7px rgba(255, 255, 255, 0.025);
+    }
+    .status-bar { height: 35px; padding: 13px 24px 0; display: flex; justify-content: space-between; color: #d9e0e7; font-size: 11px; font-weight: 700; }
+    .status-icons { letter-spacing: 2px; }
+    .screen { display: none; min-height: 789px; }
+    .screen.active { display: block; }
+    .eyebrow { color: var(--blue); font-size: 12px; font-weight: 800; letter-spacing: 0.1em; text-transform: uppercase; }
+    .muted { color: var(--muted); }
+    .button {
+      min-height: 52px;
+      border: 0;
+      border-radius: 16px;
+      padding: 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--blue-strong);
+      color: #fff;
+      font-weight: 800;
+      box-shadow: 0 10px 28px rgba(55, 125, 255, 0.27);
+    }
+    .button.secondary { background: #242e38; color: #e6edf5; box-shadow: none; }
+    .button.disabled { opacity: 0.38; box-shadow: none; }
+    .icon {
+      width: 23px;
+      height: 23px;
+      display: inline-grid;
+      place-items: center;
+      border-radius: 8px;
+      flex: 0 0 auto;
+    }
+    svg { display: block; }
+
+    /* Variant A: status-first control centre. */
+    .variant-a { background: linear-gradient(180deg, #11171d 0%, #0d1115 46%); padding: 17px 20px 34px; }
+    .a-header { display: flex; align-items: flex-start; justify-content: space-between; }
+    .a-header h1 { margin: 4px 0 0; font-size: 27px; line-height: 1.08; letter-spacing: -0.035em; }
+    .a-info { width: 36px; height: 36px; border: 1px solid var(--line); background: transparent; color: #cbd4dd; border-radius: 50%; }
+    .a-hero {
+      margin-top: 28px;
+      min-height: 244px;
+      border-radius: 28px;
+      padding: 23px;
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(145deg, #1d385f, #17283a 58%, #142029);
+      border: 1px solid rgba(110, 168, 255, 0.22);
+    }
+    .a-hero::after { content: ""; position: absolute; width: 210px; height: 210px; border-radius: 50%; right: -80px; top: -78px; border: 34px solid rgba(110, 168, 255, 0.08); }
+    .a-status { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #dce9f8; }
+    .dot { width: 8px; height: 8px; background: var(--amber); border-radius: 50%; box-shadow: 0 0 0 5px rgba(255, 203, 102, 0.11); }
+    .ready .dot { background: var(--teal); box-shadow: 0 0 0 5px rgba(85, 214, 194, 0.12); }
+    .a-value { margin-top: 31px; font-size: 50px; line-height: 0.92; font-weight: 760; letter-spacing: -0.065em; }
+    .a-value small { display: block; margin-top: 12px; font-size: 14px; line-height: 1.4; letter-spacing: 0; font-weight: 500; color: #b9c7d6; max-width: 245px; }
+    .a-actions { display: grid; gap: 10px; margin-top: 16px; }
+    .a-section-title { margin: 26px 2px 10px; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 800; }
+    .legend-row { display: grid; grid-template-columns: 44px 1fr; gap: 13px; align-items: center; padding: 13px 2px; border-bottom: 1px solid var(--line); }
+    .legend-row:last-child { border-bottom: 0; }
+    .legend-icon { width: 42px; height: 42px; border-radius: 14px; display: grid; place-items: center; background: #1c2630; color: #dce8f5; }
+    .legend-row strong { display: block; font-size: 14px; }
+    .legend-row span { display: block; margin-top: 3px; color: var(--muted); font-size: 12px; line-height: 1.35; }
+
+    /* Variant B: guided checklist. */
+    .variant-b { background: #f3f5f7; color: #17202a; padding: 13px 21px 36px; }
+    .b-header { padding: 12px 2px 17px; border-bottom: 1px solid #dce1e6; }
+    .b-header h1 { margin: 8px 0 4px; font-size: 26px; letter-spacing: -0.04em; }
+    .b-header p { margin: 0; color: #64717d; font-size: 14px; line-height: 1.45; }
+    .b-progress { margin: 22px 0 24px; display: flex; align-items: center; gap: 8px; }
+    .b-progress span { height: 5px; flex: 1; border-radius: 999px; background: #d8dee4; }
+    .b-progress span:first-child { background: #377dff; }
+    .ready .b-progress span:nth-child(2) { background: #377dff; }
+    .b-progress-label { font-size: 11px; color: #66727d; font-weight: 700; white-space: nowrap; }
+    .step { display: grid; grid-template-columns: 35px 1fr; gap: 13px; position: relative; padding-bottom: 25px; }
+    .step:not(:last-child)::after { content: ""; position: absolute; left: 17px; top: 37px; bottom: 2px; width: 1px; background: #d1d8de; }
+    .step-number { width: 35px; height: 35px; border-radius: 50%; background: #e4e9ee; color: #687581; display: grid; place-items: center; font-weight: 800; font-size: 13px; z-index: 1; }
+    .step.current .step-number { background: #377dff; color: #fff; box-shadow: 0 8px 18px rgba(55, 125, 255, 0.23); }
+    .step.done .step-number { background: #d9f4ed; color: #087764; }
+    .step-card { background: #fff; border: 1px solid #dfe4e8; border-radius: 19px; padding: 17px; box-shadow: 0 8px 24px rgba(25, 40, 55, 0.06); }
+    .step-card h2 { margin: 0; font-size: 17px; }
+    .step-card p { margin: 7px 0 15px; color: #66727d; font-size: 13px; line-height: 1.5; }
+    .step-card .button { width: 100%; }
+    .b-current { display: block; padding: 13px 15px; border-radius: 15px; background: #eef3f7; }
+    .b-current span { display: block; color: #64717d; font-size: 12px; }
+    .b-current strong { display: block; margin-top: 3px; font-size: 15px; }
+    .b-footnote { margin: 7px 48px 0; color: #73808b; font-size: 12px; line-height: 1.45; }
+
+    /* Variant C: Quick Settings tile preview. */
+    .variant-c { background: linear-gradient(180deg, #0e1114, #12171c); padding: 14px 20px 36px; }
+    .c-header { text-align: center; padding-top: 8px; }
+    .c-header h1 { margin: 7px 0 5px; font-size: 24px; letter-spacing: -0.035em; }
+    .c-header p { margin: 0 auto; max-width: 270px; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .tile-stage { margin: 25px auto 18px; min-height: 300px; display: grid; place-items: center; position: relative; }
+    .tile-orbit { position: absolute; width: 285px; height: 285px; border: 1px solid rgba(255, 255, 255, 0.055); border-radius: 50%; }
+    .tile-orbit::before, .tile-orbit::after { content: ""; position: absolute; inset: 26px; border: 1px solid rgba(255, 255, 255, 0.045); border-radius: 50%; }
+    .tile-orbit::after { inset: 57px; }
+    .qs-tile { width: 190px; min-height: 190px; padding: 25px; border-radius: 40px; display: flex; flex-direction: column; justify-content: space-between; position: relative; z-index: 2; background: #262e35; box-shadow: 0 28px 60px rgba(0,0,0,.4); }
+    .ready .qs-tile { background: linear-gradient(145deg, #2f6ecf, #2156a5); }
+    .tile-glyph { width: 57px; height: 57px; border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.12); }
+    .qs-tile strong { font-size: 18px; letter-spacing: -0.02em; }
+    .qs-tile span { display: block; margin-top: 4px; color: #c0cbd4; font-size: 13px; }
+    .ready .qs-tile span { color: #dbe9ff; }
+    .c-status { text-align: center; }
+    .c-status strong { font-size: 17px; }
+    .c-status p { margin: 6px auto 0; max-width: 305px; color: var(--muted); font-size: 13px; line-height: 1.45; }
+    .c-action-card { margin-top: 20px; padding: 14px; border: 1px solid var(--line); border-radius: 22px; background: #171d22; }
+    .c-action-card .button { width: 100%; }
+    .c-meta { display: flex; justify-content: center; gap: 18px; margin-top: 14px; color: #98a4af; font-size: 11px; }
+    .c-meta span { display: flex; align-items: center; gap: 6px; }
+
+    .ready-only { display: none !important; }
+    .ready .setup-only { display: none !important; }
+    .ready .ready-only { display: flex !important; }
+    .ready .ready-only.block { display: block !important; }
+
+    .switcher {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      z-index: 30;
+      transform: translateX(-50%);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 7px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 18px;
+      background: rgba(11, 15, 19, .94);
+      backdrop-filter: blur(18px);
+      box-shadow: 0 18px 50px rgba(0,0,0,.48);
+    }
+    .switcher button { min-height: 38px; border: 0; border-radius: 12px; color: #eef3f8; background: #202830; padding: 0 13px; font-weight: 750; font-size: 12px; }
+    .switcher button:hover { background: #2b3641; }
+    .switcher .arrow { width: 38px; padding: 0; font-size: 17px; }
+    .switcher .label { min-width: 168px; background: transparent; text-align: center; pointer-events: none; }
+    .switcher .state-toggle { color: #d9ecff; background: #193657; }
+    .state-readout {
+      position: fixed;
+      top: 16px;
+      right: 20px;
+      z-index: 20;
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 12px;
+      padding: 8px 11px;
+      background: rgba(10,14,18,.76);
+      color: #9fabb6;
+      font-size: 11px;
+      line-height: 1.4;
+      text-align: right;
+    }
+    @media (max-width: 600px) {
+      .prototype-note, .state-readout { display: none; }
+      .stage { padding: 0 0 90px; display: block; }
+      .phone { width: 100%; min-height: calc(100vh - 90px); border: 0; border-radius: 0; box-shadow: none; }
+      .screen { min-height: calc(100vh - 35px - 90px); }
+      .switcher { width: calc(100% - 18px); bottom: 9px; justify-content: center; }
+      .switcher .label { min-width: 130px; }
+    }
+  </style>
+</head>
+<body class="setup">
+  <div class="prototype-note">Throwaway UI prototype</div>
+  <div class="state-readout" id="stateReadout"></div>
+  <main class="stage">
+    <div class="phone">
+      <div class="status-bar"><span>9:41</span><span class="status-icons">● ◒ ▰</span></div>
+
+      <section class="screen variant-a" data-variant="A" aria-label="Status-first control centre">
+        <header class="a-header">
+          <div><div class="eyebrow">Quick Settings utility</div><h1>Screen Timeout<br>Tile</h1></div>
+          <button class="a-info" aria-label="About this app">i</button>
+        </header>
+        <div class="a-hero">
+          <div class="a-status"><span class="dot"></span><span class="setup-only">Setup required</span><span class="ready-only">Ready in Quick Settings</span></div>
+          <div class="a-value setup-only">Permission<small>Allow Modify system settings so the tile can read and change your screen timeout.</small></div>
+          <div class="a-value ready-only block">30 sec<small>Current screen timeout. Tap the Quick Settings tile to switch to 10 minutes.</small></div>
+        </div>
+        <div class="a-actions">
+          <button class="button setup-only">Open system settings <span>›</span></button>
+          <button class="button secondary disabled setup-only">Add Quick Settings tile</button>
+          <button class="button ready-only">Add Quick Settings tile <span>›</span></button>
+        </div>
+        <div class="a-section-title"><span>Tile states</span><span class="muted">What you will see</span></div>
+        <div class="legend-row"><div class="legend-icon">⌛</div><div><strong>10 minutes</strong><span>Highlighted. Keeps the screen awake longer.</span></div></div>
+        <div class="legend-row"><div class="legend-icon">◷</div><div><strong>30 seconds</strong><span>Dim. Returns to the short timeout.</span></div></div>
+        <div class="legend-row"><div class="legend-icon">▣</div><div><strong>Permission needed</strong><span>Tap the tile to return to setup.</span></div></div>
+      </section>
+
+      <section class="screen variant-b" data-variant="B" aria-label="Guided setup checklist">
+        <header class="b-header"><div class="eyebrow">Two-minute setup</div><h1>Get your tile ready</h1><p>Complete these steps once. After that, every timeout change is one tap away.</p></header>
+        <div class="b-progress"><span></span><span></span><span></span><div class="b-progress-label setup-only">Step 1 of 3</div><div class="b-progress-label ready-only">Step 2 of 3</div></div>
+        <div class="step current setup-only"><div class="step-number">1</div><div class="step-card"><h2>Allow timeout access</h2><p>Android requires explicit permission to read and change the screen timeout. No other setting is changed.</p><button class="button">Open system settings</button></div></div>
+        <div class="step done ready-only"><div class="step-number">✓</div><div class="step-card"><h2>Timeout access allowed</h2><div class="b-current"><span>Current timeout</span><strong>30 seconds</strong></div></div></div>
+        <div class="step setup-only"><div class="step-number">2</div><div class="step-card"><h2>Add the Quick Settings tile</h2><p>This unlocks after timeout access is allowed.</p><button class="button disabled">Add tile</button></div></div>
+        <div class="step current ready-only"><div class="step-number">2</div><div class="step-card"><h2>Add the Quick Settings tile</h2><p>Android will ask where to place Screen Timeout in Quick Settings.</p><button class="button">Add tile</button></div></div>
+        <div class="step"><div class="step-number">3</div><div class="step-card"><h2>Tap whenever you need it</h2><p>Each tap switches between 30 seconds and 10 minutes. The tile is never off.</p></div></div>
+        <p class="b-footnote">No account, analytics, internet access, or background service.</p>
+      </section>
+
+      <section class="screen variant-c" data-variant="C" aria-label="Quick Settings tile preview">
+        <header class="c-header"><div class="eyebrow">Screen Timeout</div><h1>One tap from Quick Settings</h1><p>Preview the tile you are setting up, then take the one action needed now.</p></header>
+        <div class="tile-stage"><div class="tile-orbit"></div><div class="qs-tile"><div class="tile-glyph setup-only">▣</div><div class="tile-glyph ready-only">◷</div><div><strong>Screen timeout</strong><span class="setup-only">Permission needed</span><span class="ready-only">30 seconds</span></div></div></div>
+        <div class="c-status"><strong class="setup-only">Permission is the only thing missing</strong><strong class="ready-only">The tile is ready to add</strong><p class="setup-only">Allow Android's Modify system settings access. Screen Timeout Tile uses it for this setting only.</p><p class="ready-only">Add it to Quick Settings, then tap to switch between 30 seconds and 10 minutes.</p></div>
+        <div class="c-action-card"><button class="button setup-only">Allow timeout access</button><button class="button ready-only">Add to Quick Settings</button><div class="c-meta"><span>● No ads</span><span>● No account</span><span>● Offline</span></div></div>
+      </section>
+    </div>
+  </main>
+
+  <nav class="switcher" aria-label="Prototype controls">
+    <button class="arrow" id="previous" aria-label="Previous variant">←</button>
+    <button class="label" id="variantLabel" tabindex="-1"></button>
+    <button class="arrow" id="next" aria-label="Next variant">→</button>
+    <button class="state-toggle" id="stateToggle"></button>
+  </nav>
+
+  <script>
+    const variants = [
+      { key: 'A', name: 'Status first' },
+      { key: 'B', name: 'Guided setup' },
+      { key: 'C', name: 'Tile preview' },
+    ];
+    const params = new URLSearchParams(window.location.search);
+    let currentVariant = variants.findIndex((item) => item.key === (params.get('variant') || 'A').toUpperCase());
+    if (currentVariant < 0) currentVariant = 0;
+    let currentState = params.get('state') === 'ready' ? 'ready' : 'setup';
+
+    function render() {
+      const variant = variants[currentVariant];
+      document.querySelectorAll('[data-variant]').forEach((screen) => screen.classList.toggle('active', screen.dataset.variant === variant.key));
+      document.body.classList.toggle('ready', currentState === 'ready');
+      document.body.classList.toggle('setup', currentState === 'setup');
+      document.getElementById('variantLabel').textContent = `${variant.key} · ${variant.name}`;
+      document.getElementById('stateToggle').textContent = currentState === 'setup' ? 'View ready state' : 'View setup state';
+      document.getElementById('stateReadout').innerHTML = currentState === 'setup'
+        ? 'Permission: needed<br>Timeout: unavailable<br>Tile: not added · API 36'
+        : 'Permission: granted<br>Timeout: 30 seconds<br>Tile: not added · API 36';
+      params.set('variant', variant.key);
+      params.set('state', currentState);
+      history.replaceState({}, '', `${window.location.pathname}?${params}`);
+      document.title = `${variant.key} ${variant.name} · Settings prototype`;
+    }
+
+    function move(direction) {
+      currentVariant = (currentVariant + direction + variants.length) % variants.length;
+      render();
+    }
+
+    document.getElementById('previous').addEventListener('click', () => move(-1));
+    document.getElementById('next').addEventListener('click', () => move(1));
+    document.getElementById('stateToggle').addEventListener('click', () => {
+      currentState = currentState === 'setup' ? 'ready' : 'setup';
+      render();
+    });
+    document.addEventListener('keydown', (event) => {
+      if (['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName) || document.activeElement.isContentEditable) return;
+      if (event.key === 'ArrowLeft') move(-1);
+      if (event.key === 'ArrowRight') move(1);
+    });
+    render();
+  </script>
+</body>
+</html>
