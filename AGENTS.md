@@ -14,3 +14,17 @@ Add JVM tests alongside production packages in `app/src/test` using JUnit4, nami
 
 ## Commit & Pull Request Guidelines
 The current snapshot lacks Git history, so adopt Conventional Commit prefixes (`feat:`, `fix:`, `chore:`) for clarity. Keep the first line under 72 characters in the imperative mood and link issues using `Refs #123` in the body. Pull requests should summarize functional changes, call out affected components (e.g., tile service, resources), include screenshots or screen recordings when UI changes occur, and list verification steps such as emulator/API levels tested.
+
+## Agent skills
+
+### Issue tracker
+
+Issues and specs live in `StoneHub/screen-timeout-tile` GitHub Issues. Read `docs/agents/issue-tracker.md` before issue or planning work.
+
+### Triage labels
+
+Use the default Matt triage roles. Read `docs/agents/triage-labels.md` before triage work.
+
+### Domain docs
+
+This is a single-context project. Read `docs/agents/domain.md` before domain-modeling or architecture work.
