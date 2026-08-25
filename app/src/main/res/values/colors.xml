@@ -3,6 +3,16 @@
     <color name="brand_primary">#FF2563EB</color>
     <color name="brand_primary_dark">#FF1D4ED8</color>
     <color name="brand_secondary">#FF14B8A6</color>
+    <color name="setup_background">#FFF4F2EC</color>
+    <color name="setup_surface">#FFFFFFFF</color>
+    <color name="setup_text_primary">#FF172033</color>
+    <color name="setup_text_secondary">#FF5B6473</color>
+    <color name="setup_text_muted">#FF8A919D</color>
+    <color name="setup_outline">#FFE2DED5</color>
+    <color name="setup_outline_current">#FFBBD2FF</color>
+    <color name="setup_progress_track">#FFDCE3EE</color>
+    <color name="setup_success">#FF16815A</color>
+    <color name="setup_timeout_surface">#FFF1F5FA</color>
     <color name="surface_dark">#FF101418</color>
     <color name="surface_panel_dark">#FF182026</color>
     <color name="text_primary_dark">#FFF7FAFC</color>
