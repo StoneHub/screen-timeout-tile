@@ -20,4 +20,13 @@
         <item name="android:textAllCaps">false</item>
         <item name="cornerRadius">12dp</item>
     </style>
+
+    <style name="Widget.ScreenTimeoutTile.Button.Outlined" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:minHeight">48dp</item>
+        <item name="android:insetTop">0dp</item>
+        <item name="android:insetBottom">0dp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="cornerRadius">12dp</item>
+        <item name="strokeColor">@color/setup_outline_current</item>
+    </style>
 </resources>

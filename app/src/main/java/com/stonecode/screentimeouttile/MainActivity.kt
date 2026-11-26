@@ -1,6 +1,7 @@
 package com.stonecode.screentimeouttile
 
 import android.app.StatusBarManager
+import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.content.Intent
 import android.graphics.drawable.Icon
@@ -34,6 +35,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var tileStepBadge: TextView
     private lateinit var useStepBadge: TextView
     private lateinit var setupProgress: LinearProgressIndicator
+    private lateinit var widgetButton: Button
+    private lateinit var widgetRequestStatusView: TextView
 
     private val permissionLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -60,9 +63,12 @@ class MainActivity : AppCompatActivity() {
         tileStepBadge = findViewById(R.id.tileStepBadge)
         useStepBadge = findViewById(R.id.useStepBadge)
         setupProgress = findViewById(R.id.setupProgress)
+        widgetButton = findViewById(R.id.widgetButton)
+        widgetRequestStatusView = findViewById(R.id.widgetRequestStatus)
 
         actionButton.setOnClickListener { openWriteSettings() }
         tileButton.setOnClickListener { requestTilePlacement() }
+        widgetButton.setOnClickListener { requestWidgetPlacement() }
     }
 
     private fun configureSystemBars() {
@@ -87,6 +93,8 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         updateUi()
+        // Permission may have changed while the user was in system settings.
+        TimeoutWidgets.updateAll(this)
     }
 
     private fun openWriteSettings() {
@@ -180,6 +188,18 @@ class MainActivity : AppCompatActivity() {
         tileButton.isEnabled = false
         renderBadge(tileStepBadge, CHECK_MARK, R.drawable.setup_step_badge_done, R.color.white)
         renderBadge(useStepBadge, CHECK_MARK, R.drawable.setup_step_badge_done, R.color.white)
+    }
+
+    private fun requestWidgetPlacement() {
+        val manager = AppWidgetManager.getInstance(this)
+        val requested = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O &&
+            manager.isRequestPinAppWidgetSupported &&
+            runCatching {
+                manager.requestPinAppWidget(ComponentName(this, TimeoutWidgetProvider::class.java), null, null)
+            }.getOrDefault(false)
+        widgetRequestStatusView.text = getString(
+            if (requested) R.string.widget_request_status_sent else R.string.widget_request_status_unsupported,
+        )
     }
 
     private fun canRequestTilePlacement(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU

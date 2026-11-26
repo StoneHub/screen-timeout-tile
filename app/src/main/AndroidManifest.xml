@@ -43,6 +43,27 @@
                 android:value="android.service.quicksettings.CATEGORY_DISPLAY" />
         </service>
 
+        <receiver
+            android:name=".TimeoutWidgetProvider"
+            android:exported="true"
+            android:label="@string/widget_label">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/timeout_widget_info" />
+        </receiver>
+
+        <receiver
+            android:name=".TimeoutWidgetToggleReceiver"
+            android:exported="false" />
+
+        <service
+            android:name=".TimeoutSettingWatcher"
+            android:exported="false"
+            android:permission="android.permission.BIND_JOB_SERVICE" />
+
     </application>
 
 </manifest>

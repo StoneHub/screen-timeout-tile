@@ -15,6 +15,7 @@ Because this app is distributed outside Google Play, Android may ask you to allo
 ## What It Does
 
 - Adds a **Screen Timeout Tile** to Android Quick Settings.
+- Adds a resizable **home-screen widget** that does the same one-tap switch and stays in sync with the tile and system Settings.
 - Toggles `Settings.System.SCREEN_OFF_TIMEOUT` between 30 seconds and 10 minutes.
 - Shows the active timeout in the tile subtitle.
 - Opens the Android **Modify system settings** permission screen when access is missing.
@@ -33,7 +34,7 @@ The tile is never “off.” Each tap switches between the two timeout presets.
 
 ## Why This Exists
 
-Android has the screen timeout setting buried in system settings. This project makes that setting available as a single Quick Settings tap without adding accounts, analytics, networking, or background services.
+Android has the screen timeout setting buried in system settings. This project makes that setting available as a single Quick Settings or home-screen tap without adding accounts, analytics, networking, or always-running services. The widget uses a one-shot JobScheduler content trigger that wakes the app only when the timeout setting changes.
 
 ## Requirements
 
@@ -67,6 +68,7 @@ Debug builds use the isolated package `com.stonecode.screentimeouttile.debug`, s
    - Android 13+: tap **Add tile** and accept the system prompt.
    - Android 7-12: open Quick Settings edit mode and drag the tile into an active slot.
 5. Tap the tile to switch between 30 seconds and 10 minutes.
+6. Optional: tap **Add home-screen widget**, or long-press your home screen and choose **Widgets → Screen Timeout**.
 
 ## Permission And Privacy
 
@@ -121,6 +123,10 @@ app/src/main/java/com/stonecode/screentimeouttile/
   ScreenTimeoutSettingsStore.kt    Settings.System abstraction
   TimeoutTogglePolicy.kt           30-second / 10-minute toggle policy
   TimeoutLabelFormatter.kt         Human-readable timeout labels
+  TimeoutWidgetProvider.kt         Home-screen widget lifecycle
+  TimeoutWidgets.kt                Widget rendering and tile/widget sync
+  TimeoutWidgetToggleReceiver.kt   Private receiver for widget taps
+  TimeoutSettingWatcher.kt         Content-trigger job that refreshes widgets on external changes
 
 app/src/main/res/
   layout/activity_main.xml         Setup screen layout
