@@ -20,4 +20,10 @@
     <color name="outline_dark">#FF2B3640</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="widget_surface">#F2FFFFFF</color>
+    <color name="widget_on_surface">#FF172033</color>
+    <color name="widget_on_surface_secondary">#FF5B6473</color>
+    <color name="widget_active">#FF2563EB</color>
+    <color name="widget_on_active">#FFFFFFFF</color>
+    <color name="widget_on_active_secondary">#CCFFFFFF</color>
 </resources>

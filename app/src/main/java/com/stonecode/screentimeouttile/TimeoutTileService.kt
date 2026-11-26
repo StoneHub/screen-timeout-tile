@@ -29,7 +29,10 @@ class TimeoutTileService : TileService() {
         runCatching { controller.toggleTimeout() }
             .onSuccess { result ->
                 when (result) {
-                    is TimeoutChangeResult.Changed -> updateTileForTimeout(result.timeoutMs)
+                    is TimeoutChangeResult.Changed -> {
+                        updateTileForTimeout(result.timeoutMs)
+                        TimeoutWidgets.updateAll(this)
+                    }
                     TimeoutChangeResult.WriteFailed -> showTileError(
                         getString(R.string.tile_subtitle_write_failed),
                     )

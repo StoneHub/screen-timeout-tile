@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">Screen Timeout Tile</string>
     <string name="app_description">Switch between 30 seconds and 10 minutes from Quick Settings.</string>
     <string name="setup_eyebrow">Two-minute setup</string>
@@ -14,7 +14,7 @@
     <string name="setup_tile_ready_description">Android will ask where to place Screen Timeout in Quick Settings.</string>
     <string name="setup_tile_manual_description">Open Quick Settings edit mode and drag Screen Timeout into an active slot.</string>
     <string name="setup_use_title">Tap whenever you need it</string>
-    <string name="setup_privacy_note">No account, analytics, internet access, or background service.</string>
+    <string name="setup_privacy_note">No account, analytics, internet access, or always-running service.</string>
     <string name="tile_label">Screen timeout</string>
     <string name="tile_subtitle_permission">Grant write settings</string>
     <string name="tile_subtitle_unavailable">Timeout unavailable</string>
@@ -55,4 +55,17 @@
     <string name="tile_legend_permission_title">Lock · Permission needed</string>
     <string name="tile_legend_permission_description">Tap the tile, then allow Modify system settings.</string>
     <string name="instructions_text">Each tap switches between 30 seconds and 10 minutes. The tile is never off.</string>
+    <string name="widget_label">Screen timeout</string>
+    <string name="widget_description">Tap to switch the screen timeout between 30 seconds and 10 minutes.</string>
+    <string name="widget_caption">Timeout</string>
+    <string name="widget_preview_value">10 min</string>
+    <string name="widget_value_minutes" tools:ignore="PluralsCandidate">%1$d min</string>
+    <string name="widget_value_seconds" tools:ignore="PluralsCandidate">%1$d sec</string>
+    <string name="widget_value_permission">Set up</string>
+    <string name="widget_value_unavailable">Unavailable</string>
+    <string name="widget_content_description">Screen timeout %1$s. Double tap to switch.</string>
+    <string name="setup_widget_description">Prefer the home screen? The widget does the same one-tap switch.</string>
+    <string name="widget_button_label">Add home-screen widget</string>
+    <string name="widget_request_status_sent">Follow your launcher\'s prompt to place the widget.</string>
+    <string name="widget_request_status_unsupported">Long-press your home screen, choose Widgets, and add Screen Timeout.</string>
 </resources>

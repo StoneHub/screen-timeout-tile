@@ -22,4 +22,12 @@ object TimeoutLabelFormatter {
             )
         }
     }
+
+    /** Compact label for small surfaces such as the home-screen widget, e.g. "10 min". */
+    fun formatShort(context: Context, label: TimeoutDurationLabel): String {
+        return when (label) {
+            is TimeoutDurationLabel.Minutes -> context.getString(R.string.widget_value_minutes, label.value)
+            is TimeoutDurationLabel.Seconds -> context.getString(R.string.widget_value_seconds, label.value)
+        }
+    }
 }
